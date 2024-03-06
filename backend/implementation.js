@@ -1,5 +1,4 @@
 const { client, db } = require('./database.js');
-const { ObjectId } = require('mongodb');
 
 client.connect();
 
@@ -137,9 +136,9 @@ async function fetchCurrentData(device_name, module) {
                     reject("Invalid module name");
                     return;
             }
-            const result = await collection.findOne({ device_id: device_name }, { sort: { _id: -1 } });
+
+            const result = await collection.findOne({ 'data.DEVID': device_name }, { sort: { _id: -1 } });
             resolve(result);
-           // console.log(result)
         } catch (error) {
             reject(error);
         }

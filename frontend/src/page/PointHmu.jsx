@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 function PointHmu() {
+  console.log("point HMU");
   const [data, setData] = useState([]);
   const [activeData, setActionData] = useState([]);
   const [filteredData, setSearch] = useState([]);
@@ -11,14 +12,13 @@ function PointHmu() {
   const [actCount, setActCount] = useState(0);
   const [inactCount, setInactCount] = useState(0);
   const [posts, setPosts] = useState([]);
-  console.log(setSearch);
   useEffect(() => {
     // Create a CustomEvent to specify the 'module' detail
     const event = new CustomEvent('reloadPage', { detail: 'Point HMU' });
     window.dispatchEvent(event);
 
     // Define the API URL based on the event detail
-    const url = `http://localhost:9000/FetchDevices?module=${event.detail}`;
+    const url = `http://122.166.210.142:9000/FetchDevices?module=${event.detail}`;
     axios.get(url).then((res) => {
         // console.log('Data fetched successfully:', res.data);
         setData(res.data.data); // Assuming the data you need is inside the 'data' property

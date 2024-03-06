@@ -1,27 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 function SignalHmu() {
   const [data, setData] = useState([]);
   const [activeData, setActionData] = useState([]);
   const [filteredData, setSearch] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null)
+  const [error, setError] = useState(null);
   const [actCount, setActCount] = useState(0);
   const [inactCount, setInactCount] = useState(0);
   const [posts, setPosts] = useState([]);
-  console.log(setSearch);
+
+  const history = useHistory();
+
   useEffect(() => {
     // Create a CustomEvent to specify the 'module' detail
     const event = new CustomEvent('reloadPage', { detail: 'Signal HMU' });
     window.dispatchEvent(event);
-  
+
     // Define the API URL based on the event detail
-    const url = `http://localhost:9000/FetchDevices?module=${event.detail}`;
-    axios.get(url).then((res) => {
-        // console.log('Data fetched successfully:', res.data);
-        setData(res.data.data); // Assuming the data you need is inside the 'data' property
+    const url = `http://122.166.210.142:9000/FetchDevices?module=${event.detail}`;
+
+    axios.get(url)
+      .then((res) => {
+        setData(res.data.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -32,10 +35,9 @@ function SignalHmu() {
   }, []);
 
   useEffect(() => {
-    // Calculate active and inactive counts when data changes
     let activeCount = 0;
     let inactiveCount = 0;
-
+  
     data.forEach((item) => {
       const status = item.status;
       if (status === 1) {
@@ -44,53 +46,47 @@ function SignalHmu() {
         inactiveCount++;
       }
     });
-
+  
     setActCount(activeCount);
     setInactCount(inactiveCount);
   }, [data]);
 
-  //All data
+  // All data, Active data, Inactive data, and search functionality
+
   const handleClick = () => {
     const updatedData = data.map((item) => {
       return item;
     });
-    // Update the state with the modified data
+
     setActionData(updatedData);
-    setPosts(updatedData); // Set posts to the default 'data'
+    setPosts(updatedData);
   }
 
-  //Active data
   const handleClickAct = () => {
-    // Filter the data to include only items with status === 1
     const activeData = data.filter((item) => item.status === 1);
-    // Log the specific properties of the updated data
-    // activeData.forEach((item) => {
-    //   console.log(`ID: ${item.device_id}, Status: ${item.status}`);
-    // });
-    // Update the state with the filtered data
-      setPosts(activeData); // Set posts to the filtered 'activeData'
+    setPosts(activeData);
   }
 
-  // Inactive data
   const handleClickInact = () => {
-    const inactiveData = data.filter((item) => item.status !==1);
-    // Update the state with the filtered data using setActionData
-    setPosts(inactiveData); // Set posts to the filtered 'inactiveData'
+    const inactiveData = data.filter((item) => item.status !== 1);
+    setPosts(inactiveData);
   }
-  
+  const handleClickview = (dataItem) => {
+    const device_name = dataItem.device_id;
+    const modules =dataItem.module_name;
+    // alert(device_name + ' ' + modules);
+     // Redirect to the /signalhmuhistory page with dataItem as state
+     history.push('/signalhmuhistory', { device_name, modules });
+  };
   const handleSearchInputChange = (e) => {
     const inputValue = e.target.value.toUpperCase();
-    // Filter the data array based on the input value (converted to uppercase)
     const filteredData = data.filter((item) =>
       item.device_id.toString().toUpperCase().includes(inputValue)
     );
-    // console.log('Filtered Data:', filteredData);
-    // Update the search state with the filtered results
-    // setSearch(filteredData);
-    setPosts(filteredData); // Set posts to the filteredData
+
+    setPosts(filteredData);
   };
-  
-  // Update 'posts' based on 'data', 'activeData', 'filteredData' 
+
   useEffect(() => {
     switch (data) {
       case 'activeData':
@@ -104,7 +100,6 @@ function SignalHmu() {
         break;
     }
   }, [data, activeData, filteredData]);
-  
   return (
     <div className="content-wrapper" id="main-dashboard">
         <div className="content-header">
@@ -221,9 +216,7 @@ function SignalHmu() {
                                             )}
                                           </td>
                                           <td>
-                                            <Link to={`/signalhmuhistory/?device_name=${dataItem.device_id}&&module=${dataItem.module_name}`}>
-                                              <button type="button" className="btn btn-block btn-primary">View</button>
-                                            </Link>
+                                          <button type="button" className="btn btn-block btn-primary"  onClick={() => handleClickview(dataItem)}>View</button>
                                           </td>
                                         </tr>
                                       ))

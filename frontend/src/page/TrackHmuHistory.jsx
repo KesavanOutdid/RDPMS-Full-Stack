@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import io from 'socket.io-client';
+
 function TrackHmuHistory() {
     //const [deviceName, setDeviceName] = useState(null);
     const [module, setModule] = useState(null);
@@ -9,57 +10,74 @@ function TrackHmuHistory() {
     const [historyData, setHistoryData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-   // console.log(historyData,'history data');
+    const location = useLocation();
+    const { device_name, modules } = location.state;
     useEffect(() => {
-        // URL data get
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+        
+        const deviceNameFromURL = device_name;
+        const moduleFromURL = modules;
 
-        // Get the 'device_name' and 'module' parameters from the URL
-        const deviceNameFromURL = urlParams.get('device_name');
-        const moduleFromURL = urlParams.get('module');
+        setModule(moduleFromURL);
+           const socket = io();
+
+           // Listen for the 'tcpMessage' event
+           socket.on('tcpMessage', (message) => {
+            try {
+                const parsedMessage = JSON.parse(message);
+                if (parsedMessage.DEVID === deviceNameFromURL) {
+                    console.log('Received message from TCP server:', parsedMessage);
+                    setLiveData([parsedMessage]);
+                    setHistoryData((prevHistoryData) => [...prevHistoryData, parsedMessage]);
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+                setError('Error fetching data. Please try again.');
+                setLoading(false);
+            }
+        });
 
         // Update the state with the extracted values
         //  setDeviceName(deviceNameFromURL);
-           setModule(moduleFromURL);
+        //    setModule(moduleFromURL);
 
-        //fetchLiveData
-        const url = `http://localhost:9000/fetchLiveData?device_name=${deviceNameFromURL}&module=${moduleFromURL}`;
-        // Call the API with the extracted parameters
-        axios.get(url).then((res) => {
-           // console.log('Data fetched successfully:', res.data);
-            setLiveData(res.data.data); 
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.error('Error fetching data:', err);
-            setError('Error fetching data. Please try again.');
-            setLoading(false);
-          });
+        // //fetchLiveData
+        // const url = `http://localhost:9000/fetchLiveData?device_name=${deviceNameFromURL}&module=${moduleFromURL}`;
+        // // Call the API with the extracted parameters
+        // axios.get(url).then((res) => {
+        //    // console.log('Data fetched successfully:', res.data);
+        //     setLiveData(res.data.data); 
+        //     setLoading(false);
+        //   })
+        //   .catch((err) => {
+        //     console.error('Error fetching data:', err);
+        //     setError('Error fetching data. Please try again.');
+        //     setLoading(false);
+        //   });
     }, []);
 
     // fetchHistoryData
-    useEffect(() => {
-        // URL data get
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+    // useEffect(() => {
+    //     // URL data get
+    //     const queryString = window.location.search;
+    //     const urlParams = new URLSearchParams(queryString);
 
-        // Get the 'device_name' and 'module' parameters from the URL
-        const deviceNameFromURL = urlParams.get('device_name');
-        const moduleFromURL = urlParams.get('module');
+    //     // Get the 'device_name' and 'module' parameters from the URL
+    //     const deviceNameFromURL = urlParams.get('device_name');
+    //     const moduleFromURL = urlParams.get('module');
 
-        const url = `http://localhost:9000/fetchHistoryData?device_name=${deviceNameFromURL}&module=${moduleFromURL}`;
-        // Call the API with the extracted parameters
-        axios.get(url).then((respons) => {
-            setHistoryData(respons.data.data); // Assuming the data you need is inside the 'data' property
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.error('Error fetching data:', err);
-            setError('Error fetching data. Please try again.');
-            setLoading(false);
-          });
-    }, []);
+    //     const url = `http://localhost:9000/fetchHistoryData?device_name=${deviceNameFromURL}&module=${moduleFromURL}`;
+    //     // Call the API with the extracted parameters
+    //     axios.get(url).then((respons) => {
+    //         setHistoryData(respons.data.data); // Assuming the data you need is inside the 'data' property
+    //         setLoading(false);
+    //       })
+    //       .catch((err) => {
+    //         console.error('Error fetching data:', err);
+    //         setError('Error fetching data. Please try again.');
+    //         setLoading(false);
+    //       });
+    // }, []);
   return (
     <div className="content-wrapper" id="liveData">
         <section className="content-header">
