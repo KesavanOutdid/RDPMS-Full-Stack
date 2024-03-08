@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
-import io from 'socket.io-client';
 
 function TrackHmuHistory() {
     //const [deviceName, setDeviceName] = useState(null);
@@ -14,11 +14,13 @@ function TrackHmuHistory() {
     const { device_name, modules } = location.state;
     useEffect(() => {
         
+        // Get the 'device_name' and 'module' parameters from the URL
         const deviceNameFromURL = device_name;
         const moduleFromURL = modules;
 
+        // Update the state with the extracted values
         setModule(moduleFromURL);
-           const socket = io();
+        const socket = io();
 
            // Listen for the 'tcpMessage' event
            socket.on('tcpMessage', (message) => {
@@ -54,7 +56,7 @@ function TrackHmuHistory() {
         //     setError('Error fetching data. Please try again.');
         //     setLoading(false);
         //   });
-    }, []);
+    }, [device_name, modules]);
 
     // fetchHistoryData
     // useEffect(() => {
@@ -124,40 +126,40 @@ function TrackHmuHistory() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {loading ? (
-                                        <tr>
-                                            <td colSpan="13" style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</td>
-                                        </tr>
-                                    ) : error ? (
-                                        <tr>
-                                            <td colSpan="13" style={{ textAlign: 'center', marginTop: '50px' }}>{error}</td>
-                                        </tr>
-                                    ) : Array.isArray(liveData) && liveData.length > 0 ? (
-                                        
-                                        liveData.map((dataItem, index) => (
-                                          
-                                        <tr key={index}>
-                                            <td>{dataItem.VoltageChannels_v2}</td>
-                                            <td>{dataItem.VoltageChannels_v3}</td>
-                                            <td>{dataItem.VoltageChannels_v2}</td>
-                                            <td>{dataItem.currentChannels_i1}</td>
-                                            <td>{dataItem.currentChannels_i1}</td>
-                                            <td>{dataItem.currentChannels_i1}</td>
-                                            <td>{dataItem.VoltageChannels_v2}</td>
-                                            <td>{dataItem.VoltageChannels_v3}</td>
-                                            <td>{dataItem.VoltageChannels_v2}</td>
-                                            <td>{dataItem.currentChannels_i1}</td>
-                                            <td>{dataItem.currentChannels_i1}</td>
-                                            <td>{dataItem.currentChannels_i1}</td>
-                                            <td>{dataItem.currentChannels_i1}</td>
-                                        </tr>
-                                          ))
-                                        ) : (
-                                          <tr>
-                                            <td colSpan="13" style={{ textAlign: 'center', marginTop: '50px' }}> No device found. </td>
-                                          </tr>
-                                        )}
-                                </tbody>    
+                                        {loading ? (
+                                            <tr>
+                                                <td colSpan="13" style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</td>
+                                            </tr>
+                                        ) : error ? (
+                                            <tr>
+                                                <td colSpan="13" style={{ textAlign: 'center', marginTop: '50px' }}>{error}</td>
+                                            </tr>
+                                        ) : Array.isArray(liveData) && liveData.length > 0 ? (
+
+                                            liveData.map((dataItem, index) => (
+                                            
+                                            <tr key={index}>
+                                                <td>{dataItem.VoltageChannels_v2}</td>
+                                                <td>{dataItem.VoltageChannels_v3}</td>
+                                                <td>{dataItem.VoltageChannels_v2}</td>
+                                                <td>{dataItem.currentChannels_i1}</td>
+                                                <td>{dataItem.currentChannels_i1}</td>
+                                                <td>{dataItem.currentChannels_i1}</td>
+                                                <td>{dataItem.VoltageChannels_v2}</td>
+                                                <td>{dataItem.VoltageChannels_v3}</td>
+                                                <td>{dataItem.VoltageChannels_v2}</td>
+                                                <td>{dataItem.currentChannels_i1}</td>
+                                                <td>{dataItem.currentChannels_i1}</td>
+                                                <td>{dataItem.currentChannels_i1}</td>
+                                                <td>{dataItem.currentChannels_i1}</td>
+                                            </tr>
+                                            ))
+                                            ) : (
+                                            <tr>
+                                                <td colSpan="13" style={{ textAlign: 'center', marginTop: '50px' }}> No device found. </td>
+                                            </tr>
+                                            )}
+                                    </tbody>    
                                 </table>
                             </div>
                         </div>
@@ -202,39 +204,39 @@ function TrackHmuHistory() {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        {loading ? (
-                                            <tr>
-                                                <td colSpan="14" style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</td>
-                                            </tr>
-                                            ) : error ? (
+                                            {loading ? (
                                                 <tr>
-                                                    <td colSpan="14" style={{ textAlign: 'center', marginTop: '50px' }}>{error}</td>
+                                                    <td colSpan="14" style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</td>
                                                 </tr>
-                                            ) : Array.isArray(historyData) && historyData.length > 0 ? (
-                                                
-                                                historyData.map((historyDataItem, index) => (
-                                                
-                                                <tr key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{historyDataItem.device_id}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v1}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v2}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v3}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v1}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v2}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v3}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v1}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v2}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v3}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v1}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v2}</td>
-                                                    <td>{historyDataItem.VoltageChannels_v3}</td>
-                                                </tr>
-                                                ))
-                                            ) : (
-                                                <tr>
-                                                    <td colSpan="14" style={{ textAlign: 'center', marginTop: '50px' }}>No device found.</td>
-                                                </tr>
+                                                ) : error ? (
+                                                    <tr>
+                                                        <td colSpan="14" style={{ textAlign: 'center', marginTop: '50px' }}>{error}</td>
+                                                    </tr>
+                                                ) : Array.isArray(historyData) && historyData.length > 0 ? (
+                                                    
+                                                    historyData.map((historyDataItem, index) => (
+                                                    
+                                                    <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{historyDataItem.device_id}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v1}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v2}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v3}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v1}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v2}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v3}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v1}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v2}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v3}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v1}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v2}</td>
+                                                        <td>{historyDataItem.VoltageChannels_v3}</td>
+                                                    </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="14" style={{ textAlign: 'center', marginTop: '50px' }}>No device found.</td>
+                                                    </tr>
                                             )}
                                         </tbody>
                                     </table>

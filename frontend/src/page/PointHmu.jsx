@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 function PointHmu() {
-  console.log("point HMU");
   const [data, setData] = useState([]);
   const [activeData, setActionData] = useState([]);
   const [filteredData, setSearch] = useState([]);
@@ -12,13 +11,24 @@ function PointHmu() {
   const [actCount, setActCount] = useState(0);
   const [inactCount, setInactCount] = useState(0);
   const [posts, setPosts] = useState([]);
+  const history = useHistory();
+
+  console.log(setSearch);
+
+  const handleClickview = (dataItem) => {
+    const device_name = dataItem.device_id;
+    const modules =dataItem.module_name;
+    // alert(device_name + ' ' + modules);
+    // Redirect to the /signalhmuhistory page with dataItem as state
+    history.push('/pointhmuhistory', { device_name, modules });
+};
   useEffect(() => {
     // Create a CustomEvent to specify the 'module' detail
     const event = new CustomEvent('reloadPage', { detail: 'Point HMU' });
     window.dispatchEvent(event);
 
     // Define the API URL based on the event detail
-    const url = `http://122.166.210.142:9000/FetchDevices?module=${event.detail}`;
+    const url = `/FetchDevices?module=${event.detail}`;
     axios.get(url).then((res) => {
         // console.log('Data fetched successfully:', res.data);
         setData(res.data.data); // Assuming the data you need is inside the 'data' property
@@ -220,9 +230,7 @@ function PointHmu() {
                                                     )}
                                                   </td>
                                                   <td>
-                                                    <Link to={`/Pointhmuhistory/?device_name=${dataItem.device_id}&&module=${dataItem.module_name}`}>
-                                                      <button type="button" className="btn btn-block btn-primary">View</button>
-                                                    </Link>
+                                                    <button type="button" className="btn btn-block btn-primary"  onClick={() => handleClickview(dataItem)}>View</button>
                                                   </td>
                                                 </tr>
                                               ))

@@ -11,8 +11,8 @@ function SignalHmu() {
   const [actCount, setActCount] = useState(0);
   const [inactCount, setInactCount] = useState(0);
   const [posts, setPosts] = useState([]);
-
   const history = useHistory();
+  console.log(setSearch);
 
   useEffect(() => {
     // Create a CustomEvent to specify the 'module' detail
@@ -20,7 +20,7 @@ function SignalHmu() {
     window.dispatchEvent(event);
 
     // Define the API URL based on the event detail
-    const url = `http://122.166.210.142:9000/FetchDevices?module=${event.detail}`;
+    const url = `/FetchDevices?module=${event.detail}`;
 
     axios.get(url)
       .then((res) => {

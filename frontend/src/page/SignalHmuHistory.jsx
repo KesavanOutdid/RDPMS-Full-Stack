@@ -28,31 +28,31 @@ function SignalHmuHistory() {
            setModule(moduleFromURL);
            const socket = io();
 
-           // Listen for the 'tcpMessage' event
-           socket.on('tcpMessage', (message) => {
-            try {
-                const parsedMessage = JSON.parse(message);
-                if (parsedMessage.DEVID === deviceNameFromURL) {
-                    console.log('Received message from TCP server:', parsedMessage);
-                    setLiveData([parsedMessage]);
-                    // setHistory((history) => [
-                    //     ...history,
-                    //     {
-                    //         DEVID: parsedMessage.DEVID
+            // Listen for the 'tcpMessage' event
+            socket.on('tcpMessage', (message) => {
+                try {
+                        const parsedMessage = JSON.parse(message);
+                        if (parsedMessage.DEVID === deviceNameFromURL) {
+                            console.log('Received message from TCP server:', parsedMessage);
+                            setLiveData([parsedMessage]);
+                            // setHistory((history) => [
+                            //     ...history,
+                            //     {
+                            //         DEVID: parsedMessage.DEVID
 
-                    //     }
-                    // ]);
-                    
-                    // setHistoryData([parsedMessage]);
-                    setHistoryData((prevHistoryData) => [parsedMessage,...prevHistoryData]);
-                    setLoading(false);
-                }
-            } catch (error) {
-                console.error('Error parsing JSON:', error);
-                setError('Error fetching data. Please try again.');
-                setLoading(false);
-            }
-        });
+                            //     }
+                            // ]);
+                            
+                            // setHistoryData([parsedMessage]);
+                            setHistoryData((prevHistoryData) => [parsedMessage,...prevHistoryData]);
+                            setLoading(false);
+                        }
+                    } catch (error) {
+                        console.error('Error parsing JSON:', error);
+                        setError('Error fetching data. Please try again.');
+                        setLoading(false);
+                    }
+            });
         
         //fetchLiveData
         // /const url = `http://localhost:9000/fetchLiveData?device_name=${deviceNameFromURL}&module=${moduleFromURL}`;
@@ -67,7 +67,8 @@ function SignalHmuHistory() {
         //     setError('Error fetching data. Please try again.');
         //     setLoading(false);
         //   });
-    }, []);
+    }, [device_name, modules]);
+
       
     // fetchHistoryData
     // useEffect(() => {
@@ -121,26 +122,26 @@ function SignalHmuHistory() {
                         <div>
                         <div className="card-body table-responsive">
                             <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style={{ textAlign: 'center' }}>Device ID</th>
-                                    <th colSpan="4" style={{ textAlign: 'center' }}>Voltage Channels</th>
-                                    <th colSpan="4" style={{ textAlign: 'center' }}>Current Channels</th>
-                                    <th style={{ textAlign: 'center' }}>Status</th>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th>V1</th>
-                                    <th>V2</th>
-                                    <th>V3</th>
-                                    <th>V4</th>
-                                    <th>I1</th>
-                                    <th>I2</th>
-                                    <th>I3</th>
-                                    <th>I4</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
+                                <thead>
+                                    <tr>
+                                        <th style={{ textAlign: 'center' }}>Device ID</th>
+                                        <th colSpan="4" style={{ textAlign: 'center' }}>Voltage Channels</th>
+                                        <th colSpan="4" style={{ textAlign: 'center' }}>Current Channels</th>
+                                        <th style={{ textAlign: 'center' }}>Status</th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th>V1</th>
+                                        <th>V2</th>
+                                        <th>V3</th>
+                                        <th>V4</th>
+                                        <th>I1</th>
+                                        <th>I2</th>
+                                        <th>I3</th>
+                                        <th>I4</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     {loading ? (
                                         <tr>
@@ -199,60 +200,60 @@ function SignalHmuHistory() {
                         <div>
                         <div className="card-body table-responsive" style={{maxHeight:"350px",overflowY:"auto"}}>
                             <table id="example2" className="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th style={{ width: '10px' }}>Sl.no</th>
-                                    <th style={{ textAlign: 'center' }}>Device ID</th>
-                                    <th colSpan="4" style={{ textAlign: 'center' }}>Voltage Channels</th>
-                                    <th colSpan="4" style={{ textAlign: 'center' }}>Current Channels</th>
-                                    <th style={{ textAlign: 'center' }}>Status</th>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>V1</th>
-                                    <th>V2</th>
-                                    <th>V3</th>
-                                    <th>V4</th>
-                                    <th>I1</th>
-                                    <th>I2</th>
-                                    <th>I3</th>
-                                    <th>I4</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                                <tbody>
-                                {loading ? (
+                                <thead>
                                     <tr>
-                                        <td colSpan="11" style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</td>
+                                        <th style={{ width: '10px' }}>Sl.no</th>
+                                        <th style={{ textAlign: 'center' }}>Device ID</th>
+                                        <th colSpan="4" style={{ textAlign: 'center' }}>Voltage Channels</th>
+                                        <th colSpan="4" style={{ textAlign: 'center' }}>Current Channels</th>
+                                        <th style={{ textAlign: 'center' }}>Status</th>
                                     </tr>
-                                    ) : error ? (
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th>V1</th>
+                                        <th>V2</th>
+                                        <th>V3</th>
+                                        <th>V4</th>
+                                        <th>I1</th>
+                                        <th>I2</th>
+                                        <th>I3</th>
+                                        <th>I4</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {loading ? (
                                         <tr>
-                                            <td colSpan="11" style={{ textAlign: 'center', marginTop: '50px' }}>{error}</td>
+                                            <td colSpan="11" style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</td>
                                         </tr>
-                                    ) : Array.isArray(historyData) && historyData.length > 0 ? (
-                                        
-                                        historyData.map((dataItem, index) => (
-                                          
-                                        <tr key={index}>
-                                        <td>{index + 1}</td>
-                                        <td>{dataItem.DEVID}</td>
-                                        <td>{dataItem.VC.v1}</td>
-                                            <td>{dataItem.VC.v2}</td>
-                                            <td>{dataItem.VC.v3}</td>
-                                            <td>{dataItem.VC.v4}</td>
-                                            <td>{dataItem.CC.i1/1000}</td>
-                                            <td>{dataItem.CC.i2/1000}</td>
-                                            <td>{dataItem.CC.i3/1000}</td>
-                                            <td>{dataItem.CC.i4/1000}</td>
-                                        {dataItem.SIGSTATUS.status === 'OK' ? <td><span className="badge bg-success">Active</span></td> : <td><span className="badge bg-danger">Inactive</span></td>}
-                                        </tr>
-                                        
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="11" style={{ textAlign: 'center', marginTop: '50px' }}>No device found.</td>
-                                        </tr>
+                                        ) : error ? (
+                                            <tr>
+                                                <td colSpan="11" style={{ textAlign: 'center', marginTop: '50px' }}>{error}</td>
+                                            </tr>
+                                        ) : Array.isArray(historyData) && historyData.length > 0 ? (
+                                            
+                                            historyData.map((dataItem, index) => (
+                                            
+                                            <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{dataItem.DEVID}</td>
+                                            <td>{dataItem.VC.v1}</td>
+                                                <td>{dataItem.VC.v2}</td>
+                                                <td>{dataItem.VC.v3}</td>
+                                                <td>{dataItem.VC.v4}</td>
+                                                <td>{dataItem.CC.i1/1000}</td>
+                                                <td>{dataItem.CC.i2/1000}</td>
+                                                <td>{dataItem.CC.i3/1000}</td>
+                                                <td>{dataItem.CC.i4/1000}</td>
+                                            {dataItem.SIGSTATUS.status === 'OK' ? <td><span className="badge bg-success">Active</span></td> : <td><span className="badge bg-danger">Inactive</span></td>}
+                                            </tr>
+                                            
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="11" style={{ textAlign: 'center', marginTop: '50px' }}>No device found.</td>
+                                            </tr>
                                     )}
                                 </tbody>
                             </table>
