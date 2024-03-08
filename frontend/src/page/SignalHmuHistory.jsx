@@ -156,14 +156,14 @@ function SignalHmuHistory() {
                                           
                                         <tr key={index}>
                                             <td>{dataItem.DEVID}</td>
-                                            <td>{dataItem.VC.v1/100}</td>
-                                            <td>{dataItem.VC.v2/100}</td>
-                                            <td>{dataItem.VC.v3/100}</td>
-                                            <td>{dataItem.VC.v4/100}</td>
-                                            <td>{dataItem.CC.i1/100}</td>
-                                            <td>{dataItem.CC.i2/100}</td>
-                                            <td>{dataItem.CC.i3/100}</td>
-                                            <td>{dataItem.CC.i4/100}</td>
+                                            <td>{dataItem.VC.v1}</td>
+                                            <td>{dataItem.VC.v2}</td>
+                                            <td>{dataItem.VC.v3}</td>
+                                            <td>{dataItem.VC.v4}</td>
+                                            <td>{dataItem.CC.i1/1000}</td>
+                                            <td>{dataItem.CC.i2/1000}</td>
+                                            <td>{dataItem.CC.i3/1000}</td>
+                                            <td>{dataItem.CC.i4/1000}</td>
                                             {dataItem.SIGSTATUS.status === 'OK' ? <td><span className="badge bg-success">Active</span></td> : <td><span className="badge bg-danger">Inactive</span></td>}
                                         </tr>
                                           ))
@@ -237,14 +237,14 @@ function SignalHmuHistory() {
                                         <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{dataItem.DEVID}</td>
-                                        <td>{dataItem.VC.v1/100}</td>
-                                            <td>{dataItem.VC.v2/100}</td>
-                                            <td>{dataItem.VC.v3/100}</td>
-                                            <td>{dataItem.VC.v4/100}</td>
-                                            <td>{dataItem.CC.i1/100}</td>
-                                            <td>{dataItem.CC.i2/100}</td>
-                                            <td>{dataItem.CC.i3/100}</td>
-                                            <td>{dataItem.CC.i4/100}</td>
+                                        <td>{dataItem.VC.v1}</td>
+                                            <td>{dataItem.VC.v2}</td>
+                                            <td>{dataItem.VC.v3}</td>
+                                            <td>{dataItem.VC.v4}</td>
+                                            <td>{dataItem.CC.i1/1000}</td>
+                                            <td>{dataItem.CC.i2/1000}</td>
+                                            <td>{dataItem.CC.i3/1000}</td>
+                                            <td>{dataItem.CC.i4/1000}</td>
                                         {dataItem.SIGSTATUS.status === 'OK' ? <td><span className="badge bg-success">Active</span></td> : <td><span className="badge bg-danger">Inactive</span></td>}
                                         </tr>
                                         

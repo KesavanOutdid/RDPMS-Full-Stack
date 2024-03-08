@@ -142,9 +142,28 @@ async function ReceivedMessage(message) {
             } catch (error) {
                 console.error('Error inserting SignalHmu data:', error);
             }
+        }else if(parsedMessage.DEVID.includes('PHMU')){
+            try {
+                const DB_FRAME = {
+                    DEVID: parsedMessage.DEVID,
+                    V1: parsedMessage.VC.v1,
+                    V2: parsedMessage.VC.v2,
+                    V3: parsedMessage.VC.v3,
+                    V4: parsedMessage.VC.v4,
+                    I1: parsedMessage.CC.i1,
+                    I2: parsedMessage.CC.i2,
+                    I3: parsedMessage.CC.i3,
+                    I4: parsedMessage.CC.i4,
+                    Status: parsedMessage.SIGSTATUS.status
+                };
+                const savePointHmu = await SavePointHmu(DB_FRAME); // save point hmu data into db
+                console.log(savePointHmu);
+            } catch (error) {
+                console.error('Error inserting PointHmu data:', error);
+            }
         }
     } catch (error) {
-        console.error('Error parsing or inserting SignalHmu data:', error);
+        console.error('Error parsing or inserting data:', error);
     }
 }
 
